@@ -23,6 +23,18 @@ namespace BankAccount.Classes
             }
         }
 
+        public decimal Deposit(decimal amount)
+        {
+            balance += amount;
+            return balance;
+        }
+
+        public decimal Withdraw(decimal amount)
+        {
+            balance -= amount;
+            return balance;
+        }
+
         public List<string> Transactions { get; set; } = new List<string>();
     }
 }

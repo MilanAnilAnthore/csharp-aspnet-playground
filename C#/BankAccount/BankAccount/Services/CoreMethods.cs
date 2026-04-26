@@ -46,6 +46,28 @@ namespace BankAccount.Services
                 if (foundAccount != null)
                 {
                     Console.WriteLine($"Account found for {foundAccount.AccountHolder} with balance of ${foundAccount.Balance}");
+                    var result = UserPrompts.OptionsPrompt();
+
+                    switch (result)
+                    {
+                        case 1:
+                            TransactionMethods.Deposit(foundAccount);
+                            break;
+                        case 2:
+                            TransactionMethods.WithdrawAmount(foundAccount);
+                            break;
+                        case 3:
+                            TransactionMethods.CheckBalance(foundAccount);
+                            break;
+                        case 4:
+                            TransactionMethods.CheckTransactions(foundAccount);
+                            break;
+                        case 5:
+                            break;
+                        default:
+                            Console.WriteLine("Invalid option. Returning to main menu.");
+                            break;
+                    }
                     break;
                 }
                 else

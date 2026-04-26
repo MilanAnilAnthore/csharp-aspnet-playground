@@ -35,6 +35,35 @@ namespace BankAccount.ConsoleUI
             }
         }
 
+
+        public static int OptionsPrompt()
+        {
+            Console.WriteLine("Please choose one of the following options:");
+            Console.WriteLine("1. Deposit");
+            Console.WriteLine("2. Withdraw");
+            Console.WriteLine("3. Check Balance");
+            Console.WriteLine("4. Check Transaction History");
+            Console.WriteLine("5. Exit");
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    if (choice >= 1 && choice <= 5)
+                    {
+                        return choice;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid choice. Please enter a number between 1 and 5.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a number between 1 and 5.");
+                }
+            }
+        }
+
         public static string GetUserName()
         {
             Console.Write("ENTER ACCOUNT HOLDER NAME: ");
