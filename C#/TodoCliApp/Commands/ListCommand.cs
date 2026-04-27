@@ -39,7 +39,7 @@ namespace TodoCliApp.Commands
                         return;
                     }
 
-                    var todoList = await _service.GetByStatusAsync(statusEnum);
+                    var todoList = await _service.GetByStatusSortedAsync(statusEnum);
                     if(todoList.Count != 0)
                     {
                         foreach (var ListItem in todoList)

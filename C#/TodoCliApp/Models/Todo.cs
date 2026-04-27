@@ -19,7 +19,7 @@ namespace TodoCliApp.Models
         // Returns a formatted string representation of the Todo task for easy display and debugging.
         public override string ToString()
         {
-            return $"{Title} - Priority: {Priority}, Status: {Status}, Due: {DueDate.ToShortDateString()}";
+            return $"[{Id}] - {Title} - Priority: {Priority}, Status: {Status}, Due: {DueDate.ToShortDateString()}";
         }
     }
 }
