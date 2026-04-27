@@ -8,6 +8,7 @@ using TodoCliApp.Services;
 var jsonRepo = new JsonTodoRepository();
 var services = new TodoService(jsonRepo);
 var addCommand = new AddCommand(services);
+var listCommand = new ListCommand(services);
 
 // rootCommand
 var rootCommand = new RootCommand("Sample command-line TO-Do app");
@@ -16,5 +17,7 @@ var rootCommand = new RootCommand("Sample command-line TO-Do app");
 
 
 rootCommand.Subcommands.Add(addCommand.addCommand);
+rootCommand.Subcommands.Add(listCommand.listCommand);
+
 
 return rootCommand.Parse(args).Invoke();

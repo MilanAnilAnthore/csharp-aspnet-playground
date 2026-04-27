@@ -12,5 +12,10 @@ namespace TodoCliApp.Models
         public Priority Priority { get; set; }
         public TodoStatus Status { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Title} - Priority: {Priority}, Status: {Status}, Due: {DueDate.ToShortDateString()}";
+        }
     }
 }

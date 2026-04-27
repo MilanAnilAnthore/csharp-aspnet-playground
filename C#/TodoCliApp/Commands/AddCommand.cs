@@ -41,13 +41,27 @@ namespace TodoCliApp.Commands
                 var priorityValue = parseResult.GetValue(PriorityOption);
                 var dateTimeValue = parseResult.GetValue(dueDateOption);
 
-
-                Console.WriteLine($"{titleValue}, {priorityValue}, {dateTimeValue}");
-
-                if (Enum.TryParse(priorityValue, true, out Priority value) && !string.IsNullOrWhiteSpace(titleValue))
+                if (string.IsNullOrWhiteSpace(titleValue))
                 {
-                    await _service.AddTodoAsync(titleValue, value, dateTimeValue);
-                }                
+                    Console.WriteLine("Error: Title cannot be empty.");
+                    return;
+                }
+
+                // Default to a priority
+                Priority priorityEnum = Priority.Medium;
+
+                // If user provided a priority then attempt to parse it
+                if (!string.IsNullOrWhiteSpace(priorityValue))
+                {
+                    if (!Enum.TryParse(priorityValue, true, out priorityEnum))
+                    {
+                        Console.WriteLine($"Error: '{priorityValue}' is not a valid priority.");
+                        return;
+                    }
+                }
+
+                await _service.AddTodoAsync(titleValue, priorityEnum, dateTimeValue);
+                Console.WriteLine($"Task '{titleValue}' added successfully!");
             });
 
         }
