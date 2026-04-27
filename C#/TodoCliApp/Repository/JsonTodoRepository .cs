@@ -4,15 +4,16 @@ using System.Text;
 using System.Text.Json;
 using System.IO;
 using TodoCliApp.Models;
+using TodoCliApp.Constants;
 
 namespace TodoCliApp.Repository
 {
     public class JsonTodoRepository : ITodoRepository
     {
-        private const string DataFilePath = "data.json";
 
         public async Task<List<Todo>> GetAllAsync()
         {
+            var DataFilePath = ConstantData.DataFilePath;
             if (File.Exists(DataFilePath))
             {
                 using FileStream openStream = File.OpenRead(DataFilePath);
@@ -27,11 +28,12 @@ namespace TodoCliApp.Repository
 
         public async Task SaveAllAsync(List<Todo> todoList)
         {
+            var DataFilePath = ConstantData.DataFilePath;
             var options = new JsonSerializerOptions()
             {
                 WriteIndented = true
             };
-            using FileStream createStream = File.Create("data.json");
+            using FileStream createStream = File.Create(DataFilePath);
             await JsonSerializer.SerializeAsync(createStream, todoList);
 
         }
