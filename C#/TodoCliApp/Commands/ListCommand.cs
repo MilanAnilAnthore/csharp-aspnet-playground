@@ -10,7 +10,9 @@ namespace TodoCliApp.Commands
     internal class ListCommand
     {
         private readonly TodoService _service;
+
         public Command listCommand { get; }
+
         public ListCommand(TodoService service)
         {
             _service = service;
@@ -22,7 +24,6 @@ namespace TodoCliApp.Commands
                 Description = "Use this option to filter using status of tasks"
             };
 
-
             listCommand.Options.Add(statusOption);
 
             listCommand.SetAction(async parseResult =>
@@ -31,27 +32,25 @@ namespace TodoCliApp.Commands
 
                 if (!string.IsNullOrWhiteSpace(statusValue))
                 {
+                    // Try to parse the status or return an error if invalid
                     if (!Enum.TryParse(statusValue, true, out TodoStatus statusEnum))
                     {
                         Console.WriteLine($"Error: '{statusValue}' is not a valid status.");
                         return;
                     }
+
+                    var todoList = await _service.GetByStatusAsync(statusEnum);
+                    if(todoList.Count != 0)
+                    {
+                        foreach (var ListItem in todoList)
+                        {
+                            Console.WriteLine(ListItem);
+                        }
+                    }
                     else
                     {
-                        var todoList = await _service.GetByStatusAsync(statusEnum);
-                        if(todoList.Count != 0)
-                        {
-                            foreach (var ListItem in todoList)
-                            {
-                                Console.WriteLine(ListItem);
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("No todo which is completed");
-                            return;
-                        }
-                        
+                        Console.WriteLine($"No todos found with status '{statusEnum}'");
+                        return;
                     }
                 }
                 else
