@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -76,7 +76,7 @@ namespace BankAccount.ConsoleUI
                 userName = Console.ReadLine();
             }
 
-            userName = userName.ToLower();
+            userName = userName.Trim().ToLower();
             return userName;
         }
 

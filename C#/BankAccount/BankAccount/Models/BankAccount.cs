@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BankAccount.Classes
+namespace BankAccount.Models
 {
-    internal class BankAccountClass
+    internal class Account
     {
         public string AccountHolder { get; set; } = "";
 
@@ -25,14 +25,19 @@ namespace BankAccount.Classes
 
         public decimal Deposit(decimal amount)
         {
-            balance += amount;
-            return balance;
+            Balance += amount;
+            return Balance;
         }
 
         public decimal Withdraw(decimal amount)
         {
-            balance -= amount;
-            return balance;
+            if (amount > Balance)
+            {
+                return -1; // Insufficient funds
+            }
+
+            Balance -= amount;
+            return Balance;
         }
 
         public List<string> Transactions { get; set; } = new List<string>();

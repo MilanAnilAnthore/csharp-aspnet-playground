@@ -33,13 +33,10 @@ namespace TodoCliApp.Services
                 CreatedAt = DateTime.Now
             };
 
-            //await JsonTodoRepository.SaveAllAsync(newTodo);
-        }
-
-        public static List<Todo> LoadAccounts()
-        {
-            var DataFilePath = ConstantData.DataFilePath;
-
+            var jsonObj = new JsonTodoRepository();
+            List<Todo> loadedData = await jsonObj.GetAllAsync();
+            loadedData.Add(newTodo);
+            await jsonObj.SaveAllAsync(loadedData);
         }
 
     }
