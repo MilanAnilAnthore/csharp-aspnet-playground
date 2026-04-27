@@ -17,12 +17,14 @@ namespace TodoCliApp.Services
             _repository = repository;
         }
 
+        // Use to add a Todo Task
         public async Task AddTodoAsync(string title, Priority priority, DateTime dueDate)
         {
             if (string.IsNullOrWhiteSpace(title))
             {
                 throw new ArgumentException("Title cannot be empty.", nameof(title));
-            }else if (DateTime.Now > dueDate)
+            }
+            else if (DateTime.Today > dueDate)
             {
                 throw new ArgumentException("The due date has already expired.", nameof(dueDate));
             }
@@ -43,6 +45,7 @@ namespace TodoCliApp.Services
             await _repository.SaveAllAsync(loadedData);
         }
 
+        // Use to get all the existing TodoTasks
         public async Task<List<Todo>> GetAllTodosAsync()
         {
             return await _repository.GetAllAsync();
@@ -70,6 +73,7 @@ namespace TodoCliApp.Services
             }
         }
 
+        // Use to delete a single TodoTask using its id
         public async Task DeleteTodoAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -92,23 +96,42 @@ namespace TodoCliApp.Services
             }
         }
 
+        // Use to get Todo with a specific task type(Either pending or completed)
         public async Task<List<Todo>> GetByStatusAsync(TodoStatus status)
         {
-            if (status == TodoStatus.Completed || status == TodoStatus.Pending)
-            {
                 List<Todo> loadedData = await _repository.GetAllAsync();
                 var filteredData = loadedData.Where(a => a.Status == status);
-                if (filteredData.Any())
-                {
-                    return filteredData.ToList();
-                }
-                else
-                {
-                    throw new ArgumentException("There is no data with status", nameof(status));
-                }
-            }
+                return filteredData.ToList();
+        }
 
-            throw new ArgumentException("Invalid status provided", nameof(status));
+
+        // Sort the tasks in descending order
+        public async Task<List<Todo>> GetSortedByPriorityAsync()
+        {
+            List<Todo> loadedData = await _repository.GetAllAsync();
+
+            var sortedDescending = loadedData.OrderByDescending(a => a.Priority);
+
+            return sortedDescending.ToList();
+        }
+
+        // Sort the tasks using the due date ascending order
+        public async Task<List<Todo>> GetSortedByDueDateAsync()
+        {
+            List<Todo> loadedData = await _repository.GetAllAsync();
+
+            var sortByDue = loadedData.OrderBy(a => a.DueDate);
+            return sortByDue.ToList();
+        }
+
+        // Sort the tasks by status and then filter by highest priority
+        public async Task<List<Todo>> GetByStatusSortedAsync(TodoStatus status)
+        {
+            var filterByStatus = await GetByStatusAsync(status);
+
+            var sortedTasks = filterByStatus.OrderByDescending(t => t.Priority);
+
+            return sortedTasks.ToList();
         }
     }
 }
