@@ -10,6 +10,7 @@ namespace TodoCliApp.Commands
 {
     internal class AddCommand
     {
+        // exposing just the getter so no access to change the command
         public Command addCommand { get; }
         private readonly TodoService _service;
 
@@ -20,7 +21,7 @@ namespace TodoCliApp.Commands
             // Defining the subcommand to add
             addCommand = new Command("add", "use to add tasks");
 
-                //Defining the options for subcommand
+                //Defining the options and arguments for subcommand
                 Argument<string> titleArgument = new Argument<string>("title");
                 Option<string> PriorityOption = new Option<string>("--priority", "-p")
                     {
@@ -31,12 +32,15 @@ namespace TodoCliApp.Commands
                 Description = "Use this to add due of task"
                 };
 
+            // adding the options and arguments for subcommand
             addCommand.Add(titleArgument);
             addCommand.Options.Add(PriorityOption);
             addCommand.Options.Add(dueDateOption);
 
+            // retrieving the value from clis
             addCommand.SetAction(async parseResult =>
             {
+                // assigning the retrieved value to appropriate variables
                 var titleValue = parseResult.GetValue(titleArgument);
                 var priorityValue = parseResult.GetValue(PriorityOption);
                 var dateTimeValue = parseResult.GetValue(dueDateOption);

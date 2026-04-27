@@ -9,15 +9,20 @@ using TodoCliApp.Models;
 
 namespace TodoCliApp.Repository
 {
+    // Assigning the ITodoRepository interface to the class
     public class JsonTodoRepository : ITodoRepository
     {
-
+        // options for json serialization
         private readonly JsonSerializerOptions _options = new()
         {
+            // pretty printing
             WriteIndented = true,
+            // store enum as string rather than number
             Converters = { new JsonStringEnumConverter() }
         };
 
+
+        // function to load data from JSON
         public async Task<List<Todo>> GetAllAsync()
         {
             var DataFilePath = ConstantData.DataFilePath;
@@ -41,6 +46,7 @@ namespace TodoCliApp.Repository
             
         }
 
+        // function to save data to json
         public async Task SaveAllAsync(List<Todo> todoList)
         {
             var DataFilePath = ConstantData.DataFilePath;

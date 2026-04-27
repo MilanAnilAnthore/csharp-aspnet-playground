@@ -52,6 +52,7 @@ namespace TodoCliApp.Services
             return await _repository.GetAllAsync();
         }
 
+        // Use to assign a todo task as completed
         public async Task CompleteTodoAsync(Guid id)
         {
             if(id == Guid.Empty)
