@@ -7,7 +7,7 @@ using TodoCliApp.Repository;
 
 namespace TodoCliApp.Services
 {
-    internal class TodoService
+    internal class TodoService: IServiceRepository
     {
 
         private readonly ITodoRepository _repository;
