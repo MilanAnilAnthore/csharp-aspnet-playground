@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using TodoCliApp.Constants;
@@ -43,7 +43,6 @@ namespace TodoCliApp.Services
             List<Todo> loadedData = await _repository.GetAllAsync();
             loadedData.Add(newTodo);
             await _repository.SaveAllAsync(loadedData);
-            Console.WriteLine("Successfully saved");
         }
 
         // Use to get all the existing TodoTasks

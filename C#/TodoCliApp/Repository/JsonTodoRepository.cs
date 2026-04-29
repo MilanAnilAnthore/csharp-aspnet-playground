@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -39,8 +39,9 @@ namespace TodoCliApp.Repository
                     return new List<Todo>();
                 }
             }
-            catch
+            catch (JsonException ex)
             {
+                Console.Error.WriteLine($"Warning: Could not parse {DataFilePath}: {ex.Message}");
                 return new List<Todo>();
             }
             

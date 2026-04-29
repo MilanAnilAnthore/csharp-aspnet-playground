@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.CommandLine;
@@ -64,8 +64,15 @@ namespace TodoCliApp.Commands
                     }
                 }
 
-                await _service.AddTodoAsync(titleValue, priorityEnum, dateTimeValue);
-                Console.WriteLine($"Task '{titleValue}' added successfully!");
+                try
+                {
+                    await _service.AddTodoAsync(titleValue, priorityEnum, dateTimeValue);
+                    Console.WriteLine($"Task '{titleValue}' added successfully!");
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}");
+                }
             });
 
         }
