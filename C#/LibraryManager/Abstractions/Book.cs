@@ -11,7 +11,9 @@ namespace LibraryManager.Abstractions
         public string author = "";
         public string genre="";
         public string ISBN = "";
-        public Boolean checkedOut = false;
+        public Boolean IsCheckedOut = false;
+        public Guid? CurrentBorrowerId { get; set; }
+        public DateTime? DueDate { get; set; }
 
         protected string GetBaseDetails()
         {
