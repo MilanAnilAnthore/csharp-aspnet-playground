@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Text;
 using static System.Net.WebRequestMethods;
+using LibraryManager.Repository;
 
 namespace LibraryManager.Abstractions
 {
-    public abstract class Book
+    public abstract class Book : IIdentifiable
     {
+        public string Id => ISBN;
         public string title="";
         public string author = "";
         public string genre="";
