@@ -1,5 +1,5 @@
-﻿using LibraryManager.Abstractions;
-using LibraryManager.Models;
+﻿using LibraryManager.Models.Books;
+using LibraryManager.Models.Members;
 using LibraryManager.Repository;
 using System;
 using System.Collections.Generic;

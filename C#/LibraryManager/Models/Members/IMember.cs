@@ -1,9 +1,9 @@
-﻿using System;
+﻿using LibraryManager.Repository;
+using System;
 using System.Collections.Generic;
 using System.Text;
-using LibraryManager.Repository;
 
-namespace LibraryManager.Repository
+namespace LibraryManager.Models.Members
 {
     public interface IMember : IIdentifiable
     {

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using LibraryManager.Abstractions;
-using LibraryManager.Repository;
 
-namespace LibraryManager.Models
+
+namespace LibraryManager.Models.Members
 {
     public class Member : IMember
     {

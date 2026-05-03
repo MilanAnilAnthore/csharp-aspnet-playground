@@ -1,9 +1,9 @@
-﻿using LibraryManager.Models;
+﻿using LibraryManager.Models.Members;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace LibraryManager.Repository
+namespace LibraryManager.Models.Books
 {
     public interface IBorrowable
     {

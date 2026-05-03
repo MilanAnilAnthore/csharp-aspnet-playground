@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using LibraryManager.Repository;
 
 namespace LibraryManager.Repository
 {
