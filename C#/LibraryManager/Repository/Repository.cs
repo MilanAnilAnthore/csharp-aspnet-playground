@@ -43,5 +43,15 @@ namespace LibraryManager.Repository
             _items = await _storage.GetAllAsync<T>(_filePath);
             return _items.FirstOrDefault(item => item.Id == Id) ?? throw new KeyNotFoundException($"Item with ID {Id} was not found.");
         }
+        public async Task UpdateItem(T item)
+        {
+            _items = await _storage.GetAllAsync<T>(_filePath);
+            var index = _items.FindIndex(el => el.Id == item.Id);
+            if (index != -1)
+            {
+                _items[index] = item;
+                await _storage.SaveAllAsync(_items, _filePath);
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ using LibraryManager.Services;
 using LibraryManager.UI;
 using LibraryManager.UI.BookUi;
 using LibraryManager.UI.MemberUi;
+using LibraryManager.UI.BorrowUi;
 
 // Initialization
 Repository<Book> book = new Repository<Book>("book.json");
@@ -32,6 +33,11 @@ while (true)
         case 2:
             {
                 await MemberMain.MemberMainMenu(service);
+                break;
+            }
+        case 3:
+            {
+                await BorrowMain.BorrowMainMenu(service);
                 break;
             }
     }

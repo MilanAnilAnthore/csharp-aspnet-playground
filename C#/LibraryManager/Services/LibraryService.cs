@@ -114,12 +114,17 @@ namespace LibraryManager.Services
         public async Task BorrowBook(string isbn, string memberId, DateTime dueDate)
         {
             var book = await _bookRepo.FindById(isbn);
+            if (book == null) throw new ArgumentException("Member not found");
             var member = await _memberRepo.FindById(memberId);
             if (member == null) throw new ArgumentException("Member not found");
 
             if (book is IBorrowable borrowable)
             {
-                borrowable.Borrow(member, dueDate);
+                book.CurrentBorrowerId = member.memberID;
+                member.BorrowedBookIds.Add(isbn);
+                
+                await _bookRepo.UpdateItem(book);
+                await _memberRepo.UpdateItem(member);
             }
             else
             {
@@ -141,6 +146,8 @@ namespace LibraryManager.Services
             if (book is IBorrowable borrowable)
             {
                 borrowable.ReturnBook(member);
+                await _bookRepo.UpdateItem(book);
+                await _memberRepo.UpdateItem(member);
             }
             else
             {
