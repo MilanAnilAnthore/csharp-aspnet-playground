@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.Text;
-using TodoCliApp.Services;
+using TodoCliApp.Repository;
 
 namespace TodoCliApp.Commands
 {
     internal class DeleteCommand
     {
-        private readonly TodoService _service;
+        private readonly IServiceRepository _service;
         public Command deleteCommand { get; }
-        public DeleteCommand(TodoService service)
+        public DeleteCommand(IServiceRepository service)
         {
             _service = service;
 

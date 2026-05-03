@@ -1,16 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.CommandLine;
-using TodoCliApp.Services;
+using TodoCliApp.Repository;
 
 namespace TodoCliApp.Commands
 {
     internal class DoneCommand
     {
-        private readonly TodoService _service;
+        private readonly IServiceRepository _service;
         public Command doneCommand { get; }
-        public DoneCommand(TodoService service)
+        public DoneCommand(IServiceRepository service)
         {
             _service = service;
 

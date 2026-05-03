@@ -12,9 +12,9 @@ namespace TodoCliApp.Commands
     {
         // exposing just the getter so no access to change the command
         public Command addCommand { get; }
-        private readonly TodoService _service;
+        private readonly IServiceRepository _service;
 
-        public AddCommand(TodoService service)
+        public AddCommand(IServiceRepository service)
         {
             _service = service;
 
@@ -64,15 +64,8 @@ namespace TodoCliApp.Commands
                     }
                 }
 
-                try
-                {
                     await _service.AddTodoAsync(titleValue, priorityEnum, dateTimeValue);
                     Console.WriteLine($"Task '{titleValue}' added successfully!");
-                }
-                catch (ArgumentException ex)
-                {
-                    Console.WriteLine($"Error: {ex.Message}");
-                }
             });
 
         }

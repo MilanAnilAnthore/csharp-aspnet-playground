@@ -1,19 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.Text;
 using TodoCliApp.Models;
-using TodoCliApp.Services;
+using TodoCliApp.Repository;
 
 namespace TodoCliApp.Commands
 {
     internal class ListCommand
     {
-        private readonly TodoService _service;
+        private readonly IServiceRepository _service;
 
         public Command listCommand { get; }
 
-        public ListCommand(TodoService service)
+        public ListCommand(IServiceRepository service)
         {
             _service = service;
 

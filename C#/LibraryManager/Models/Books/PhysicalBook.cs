@@ -5,50 +5,12 @@ using System.Text;
 
 namespace LibraryManager.Models.Books
 {
-    public class PhysicalBook : Book, IBorrowable
+    public class PhysicalBook : Book
     {
         public string ShelfLocation { get; set; } = "";
         public override string GetDetails()
         {
             return $"{GetBaseDetails()} - ShelfLocation:{ShelfLocation}";
-        }
-
-        public void Borrow(Member member, DateTime dueDate)
-        {
-            if(IsCheckedOut)
-            {
-                throw new InvalidOperationException("Book is already borrowed");
-            }
-
-            IsCheckedOut = true;
-
-
-            CurrentBorrowerId = member.memberID;
-            DueDate = dueDate;
-
-            member.BorrowedBookIds.Add(this.ISBN);
-        }
-
-        public void ReturnBook(Member member) {
-
-            if (!IsCheckedOut)
-            {
-                throw new InvalidOperationException("Book is not currently borrowed");
-            }
-
-            if(DateTime.Now > DueDate)
-            {
-                int daysOverdue = (DateTime.Now - DueDate.Value).Days;
-                Console.WriteLine($"Returned late by {daysOverdue} days!");
-            }
-
-
-            IsCheckedOut = false;
-            CurrentBorrowerId = null;
-            DueDate = null;
-
-
-            member.BorrowedBookIds.Remove(this.ISBN);
         }
     }
 }
