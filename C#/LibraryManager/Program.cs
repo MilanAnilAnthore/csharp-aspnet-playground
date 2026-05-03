@@ -1,5 +1,16 @@
 ﻿using System;
+using LibraryManager.Models.Books;
+using LibraryManager.Models.Members;
+using LibraryManager.Repository;
+using LibraryManager.Services;
 using LibraryManager.UI;
+using LibraryManager.UI.BookUi;
+
+// Initialization
+Repository<Book> book = new Repository<Book>("book.json");
+Repository<Member> member = new Repository<Member>("member.json");
+
+LibraryService service = new LibraryService(book, member);
 
 
 while (true)
@@ -14,7 +25,8 @@ while (true)
             }
         case 1:
             {
-
+                BookMain.BookMainMenu();
+                break;
             }
     }
 }
