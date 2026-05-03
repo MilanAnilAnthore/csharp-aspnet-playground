@@ -3,7 +3,9 @@ using LibraryManager.Models.Members;
 using LibraryManager.Repository;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LibraryManager.Services
 {
@@ -14,57 +16,59 @@ namespace LibraryManager.Services
 
         public LibraryService(Repository<Book> bookRepo, Repository<Member> memberRepo)
         {
-            _bookRepo = bookRepo ?? new Repository<Book>();
-            _memberRepo = memberRepo ?? new Repository<Member>();
+            _bookRepo = bookRepo ?? new Repository<Book>("book.json");
+            _memberRepo = memberRepo ?? new Repository<Member>("member.json");
         }
 
-        public void AddBook(Book book)
+        public async Task AddBook(Book book)
         {
             if (string.IsNullOrWhiteSpace(book.ISBN))
             {
                 throw new ArgumentException("Book must have an ISBN");
             }
 
-            if (_bookRepo.GetAll().Any(b => b.ISBN == book.ISBN))
+            var books = await _bookRepo.GetAll();
+            if (books.Any(b => b.ISBN == book.ISBN))
             {
                 throw new InvalidOperationException("A book with this ISBN already exists");
             }
 
-            _bookRepo.AddItem(book);
+            await _bookRepo.AddItem(book);
         }
 
-        public void RemoveBook(Book book)
+        public async Task RemoveBook(Book book)
         {
             if (string.IsNullOrWhiteSpace(book.ISBN))
             {
                 throw new ArgumentException("Book must have an ISBN");
             }
 
-            if (_bookRepo.FindById(book.ISBN) != null) 
+            var foundBook = await _bookRepo.FindById(book.ISBN);
+            if (foundBook != null) 
             {
                 if (book.IsCheckedOut)
                 {
                     throw new ArgumentException("Book is already been borrowed so cannot remove");
                 }
-                _bookRepo.RemoveItem(book);
+                await _bookRepo.RemoveItem(book);
             }
-
         }
 
-        public List<Book> GetBooks()
+        public async Task<List<Book>> GetBooks()
         {
-            return _bookRepo.GetAll().OrderBy(m => m.title).ToList(); ;
+            var books = await _bookRepo.GetAll();
+            return books.OrderBy(m => m.title).ToList();
         }
 
-        public List<Book> SearchBooks(string query)
+        public async Task<List<Book>> SearchBooks(string query)
         {
-            List<Book> book = _bookRepo.GetAll().Where(b =>
+            var allBooks = await _bookRepo.GetAll();
+            List<Book> book = allBooks.Where(b =>
                 b.title.ToLower().Contains(query.ToLower()) ||
                 b.author.ToLower().Contains(query.ToLower()) ||
                 b.genre.ToLower().Contains(query.ToLower())).ToList();
 
-
-            if (book.Count>0)
+            if (book.Count > 0)
             {
                 return book;
             }
@@ -74,24 +78,25 @@ namespace LibraryManager.Services
             }
         }
 
-        public void RegisterMember(Member member)
+        public async Task RegisterMember(Member member)
         {
             if (string.IsNullOrWhiteSpace(member.Name))
             {
                 throw new ArgumentException("Member must have a name");
             }
 
-            if (_memberRepo.GetAll().Any(m => m.Id == member.Id))
+            var members = await _memberRepo.GetAll();
+            if (members.Any(m => m.Id == member.Id))
             {
                 throw new InvalidOperationException("A member with this ID already exists");
             }
 
-            _memberRepo.AddItem(member);
+            await _memberRepo.AddItem(member);
         }
 
-        public void RemoveMember(string memberId)
+        public async Task RemoveMember(string memberId)
         {
-            var member = _memberRepo.FindById(memberId);
+            var member = await _memberRepo.FindById(memberId);
             if (member == null)
             {
                 throw new ArgumentException("Member not found");
@@ -102,19 +107,19 @@ namespace LibraryManager.Services
                 throw new InvalidOperationException("Member has borrowed books, cannot remove");
             }
 
-            _memberRepo.RemoveItem(member);
+            await _memberRepo.RemoveItem(member);
         }
 
-        public List<Member> ListAllMembers()
+        public async Task<List<Member>> ListAllMembers()
         {
-            return _memberRepo.GetAll().OrderBy(m => m.Name).ToList();
+            var members = await _memberRepo.GetAll();
+            return members.OrderBy(m => m.Name).ToList();
         }
 
-        public void BorrowBook(string isbn, string memberId, DateTime dueDate)
+        public async Task BorrowBook(string isbn, string memberId, DateTime dueDate)
         {
-            var book = _bookRepo.FindById(isbn);
-
-            var member = _memberRepo.FindById(memberId);
+            var book = await _bookRepo.FindById(isbn);
+            var member = await _memberRepo.FindById(memberId);
             if (member == null) throw new ArgumentException("Member not found");
 
             if (book is IBorrowable borrowable)
@@ -125,14 +130,12 @@ namespace LibraryManager.Services
             {
                 throw new InvalidOperationException("This book cannot be borrowed.");
             }
-            // If data is persisted, call _bookRepo.SaveData() or similar here, assuming Repository supports it
         }
 
-        public void ReturnBook(string isbn, string memberId)
+        public async Task ReturnBook(string isbn, string memberId)
         {
-            var book = _bookRepo.FindById(isbn);
-
-            var member = _memberRepo.FindById(memberId);
+            var book = await _bookRepo.FindById(isbn);
+            var member = await _memberRepo.FindById(memberId);
             if (member == null) throw new ArgumentException("Member not found");
 
             if (book.CurrentBorrowerId != member.memberID)
@@ -148,17 +151,18 @@ namespace LibraryManager.Services
             {
                 throw new InvalidOperationException("This book cannot be returned.");
             }
-            // Call SaveData() here
         }
 
-        public List<Book> GetBorrowedBooks()
+        public async Task<List<Book>> GetBorrowedBooks()
         {
-            return _bookRepo.GetAll().Where(b => b.IsCheckedOut).ToList();
+            var books = await _bookRepo.GetAll();
+            return books.Where(b => b.IsCheckedOut).ToList();
         }
 
-        public List<Book> GetOverdueBooks()
+        public async Task<List<Book>> GetOverdueBooks()
         {
-            return _bookRepo.GetAll().Where(b => 
+            var books = await _bookRepo.GetAll();
+            return books.Where(b => 
                 b.IsCheckedOut && 
                 b.DueDate.HasValue && 
                 b.DueDate.Value < DateTime.Now

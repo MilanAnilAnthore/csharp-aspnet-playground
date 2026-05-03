@@ -7,24 +7,38 @@ namespace LibraryManager.Repository
     public class Repository<T> where T: IIdentifiable
     {
         private List<T> _items = new List<T>();
+        private readonly string _filePath;
+        private readonly JsonStorage _storage;
 
-        public void AddItem(T item)
+        public Repository(string filepath) { 
+            _filePath = filepath;
+            _storage = new JsonStorage();
+        }
+        
+
+        public async Task AddItem(T item)
         {
+            _items = await _storage.GetAllAsync<T>(_filePath);
             _items.Add(item);
+            await _storage.SaveAllAsync(_items, _filePath);
         }
 
-        public void RemoveItem(T item)
+        public async Task RemoveItem(T item)
         {
+            _items = await _storage.GetAllAsync<T>(_filePath);
             _items.Remove(item);
+            await _storage.SaveAllAsync(_items, _filePath);
         }
 
-        public List<T> GetAll()
+        public async Task<List<T>> GetAll()
         {
+            _items = await _storage.GetAllAsync<T>(_filePath);
             return _items;
         }
 
-        public T FindById(string Id)
+        public async Task<T> FindById(string Id)
         {
+            _items = await _storage.GetAllAsync<T>(_filePath);
             return _items.FirstOrDefault(item => item.Id == Id) ?? throw new KeyNotFoundException($"Item with ID {Id} was not found.");
         }
     }
