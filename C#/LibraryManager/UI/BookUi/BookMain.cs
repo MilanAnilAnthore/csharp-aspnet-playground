@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using LibraryManager.Models.Books;
+using LibraryManager.Services;
 using LibraryManager.UI.BookUi;
 
 namespace LibraryManager.UI.BookUi
 {
     public class BookMain
     {
-        public static void BookMainMenu()
+        public static async Task BookMainMenu(LibraryService service)
         {
             while (true)
             {
@@ -36,8 +37,48 @@ namespace LibraryManager.UI.BookUi
                                 }
                             case 1:
                                 {
-                                    List<Book> book = AddPhysicalBookUi.AddPhysicalBook();
-
+                                    Book book = AddPhysicalBookUi.AddPhysicalBook();
+                                    await service.AddBook(book);
+                                    break;
+                                }
+                            case 2:
+                                {
+                                    Book book = AddEbookUI.AddEbook();
+                                    await service.AddBook(book);
+                                    break;
+                                }
+                            case 3:
+                                {
+                                    while (true)
+                                    {
+                                        Console.Write("Enter ISBN of Book to remove: ");
+                                        string isbnInput = Console.ReadLine() ?? "";
+                                        if (!string.IsNullOrWhiteSpace(isbnInput))
+                                        {
+                                            try
+                                            {
+                                                await service.RemoveBook(isbnInput);
+                                                break;
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Console.WriteLine(ex.Message);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine("Enter a valid ISBN");
+                                        }
+                                    }
+                                    break;
+                                }
+                            case 4:
+                                {
+                                     List<Book> Allbook = await service.GetBooks();
+                                    foreach (Book book in Allbook)
+                                    {
+                                        Console.WriteLine(book.GetDetails());
+                                    }
                                     break;
                                 }
                         }

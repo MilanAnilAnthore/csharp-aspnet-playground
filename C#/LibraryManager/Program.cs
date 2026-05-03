@@ -25,7 +25,7 @@ while (true)
             }
         case 1:
             {
-                BookMain.BookMainMenu();
+                await BookMain.BookMainMenu(service);
                 break;
             }
     }

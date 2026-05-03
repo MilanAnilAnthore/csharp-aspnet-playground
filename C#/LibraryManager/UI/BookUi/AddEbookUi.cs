@@ -5,13 +5,13 @@ using System.Text;
 
 namespace LibraryManager.UI.BookUi
 {
-    public class AddPhysicalBookUi
+    public class AddEbookUI
     {
-        public static Book AddPhysicalBook()
+        public static Book AddEbook()
         {
             while (true)
             {
-                Console.WriteLine("── ADD PHYSICAL BOOK ─-");
+                Console.WriteLine("── ADD EBOOK ─-");
                 Console.Write("Enter ISBN: ");
                 string ISBN = Console.ReadLine() ?? string.Empty;
 
@@ -24,11 +24,15 @@ namespace LibraryManager.UI.BookUi
                 Console.Write("Enter Genre: ");
                 string Genre = Console.ReadLine() ?? string.Empty;
 
-                Console.Write("Enter Shelf Location: ");
-                string ShelfLocation = Console.ReadLine() ?? string.Empty;
+                Console.Write("Enter File Size (MB): ");
+                string fileSizeStr = Console.ReadLine() ?? string.Empty;
+                decimal fileSize = 0;
+                decimal.TryParse(fileSizeStr, out fileSize);
 
-                return new PhysicalBook { ISBN = ISBN, Title = Title, Author = Author, Genre = Genre, ShelfLocation = ShelfLocation };
+                Console.Write("Enter URL: ");
+                string URL = Console.ReadLine() ?? string.Empty;
 
+                return new EBook { ISBN = ISBN, Title = Title, Author = Author, Genre = Genre, fileSize = fileSize, URL = URL };
             }
         }
     }

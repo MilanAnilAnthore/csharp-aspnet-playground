@@ -7,10 +7,10 @@ namespace LibraryManager.Models.Books
 {
     public class PhysicalBook : Book, IBorrowable
     {
-        public string shelfLocation = "";
+        public string ShelfLocation { get; set; } = "";
         public override string GetDetails()
         {
-            return $"{GetBaseDetails()} - ShelfLocation:{shelfLocation}";
+            return $"{GetBaseDetails()} - ShelfLocation:{ShelfLocation}";
         }
 
         public void Borrow(Member member, DateTime dueDate)

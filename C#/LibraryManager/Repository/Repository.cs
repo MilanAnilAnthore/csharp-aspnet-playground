@@ -21,13 +21,15 @@ namespace LibraryManager.Repository
             _items = await _storage.GetAllAsync<T>(_filePath);
             _items.Add(item);
             await _storage.SaveAllAsync(_items, _filePath);
+            Console.WriteLine("Added Successfully");
         }
 
         public async Task RemoveItem(T item)
         {
             _items = await _storage.GetAllAsync<T>(_filePath);
-            _items.Remove(item);
+            _items.RemoveAll(el => el.Id == item.Id);
             await _storage.SaveAllAsync(_items, _filePath);
+            Console.WriteLine("Removed Successfully");
         }
 
         public async Task<List<T>> GetAll()

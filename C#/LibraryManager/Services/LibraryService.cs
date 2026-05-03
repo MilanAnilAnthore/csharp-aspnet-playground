@@ -36,37 +36,32 @@ namespace LibraryManager.Services
             await _bookRepo.AddItem(book);
         }
 
-        public async Task RemoveBook(Book book)
+        public async Task RemoveBook(string ISBN)
         {
-            if (string.IsNullOrWhiteSpace(book.ISBN))
-            {
-                throw new ArgumentException("Book must have an ISBN");
-            }
-
-            var foundBook = await _bookRepo.FindById(book.ISBN);
+            var foundBook = await _bookRepo.FindById(ISBN);
             if (foundBook != null) 
             {
-                if (book.IsCheckedOut)
+                if (foundBook.IsCheckedOut)
                 {
                     throw new ArgumentException("Book is already been borrowed so cannot remove");
                 }
-                await _bookRepo.RemoveItem(book);
+                await _bookRepo.RemoveItem(foundBook);
             }
         }
 
         public async Task<List<Book>> GetBooks()
         {
             var books = await _bookRepo.GetAll();
-            return books.OrderBy(m => m.title).ToList();
+            return books.OrderBy(m => m.Title).ToList();
         }
 
         public async Task<List<Book>> SearchBooks(string query)
         {
             var allBooks = await _bookRepo.GetAll();
             List<Book> book = allBooks.Where(b =>
-                b.title.ToLower().Contains(query.ToLower()) ||
-                b.author.ToLower().Contains(query.ToLower()) ||
-                b.genre.ToLower().Contains(query.ToLower())).ToList();
+                b.Title.ToLower().Contains(query.ToLower()) ||
+                b.Author.ToLower().Contains(query.ToLower()) ||
+                b.Genre.ToLower().Contains(query.ToLower())).ToList();
 
             if (book.Count > 0)
             {
