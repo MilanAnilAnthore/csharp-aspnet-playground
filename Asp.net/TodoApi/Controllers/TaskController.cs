@@ -11,14 +11,28 @@ namespace TodoApi.Controllers
     {
         // GET: api/todos
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<List<Todo>>> GetTodo()
         {
             return Ok(await service.GetAllTodosAsync());
         }
 
+        // GET: api/todos/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Todo>> GetTodoById(string id)
+        {
+            try
+            {
+                return Ok(await service.GetTodoById(id));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
         // POST: api/Task
         [HttpPost]
-        public async Task<IActionResult> CreateTodo([FromBody] CreateTodoDto request)
+        public async Task<ActionResult> CreateTodo([FromBody] CreateTodoDto request)
         {
             try
             {
@@ -32,5 +46,6 @@ namespace TodoApi.Controllers
             }
         }
 
+        
     }
 }

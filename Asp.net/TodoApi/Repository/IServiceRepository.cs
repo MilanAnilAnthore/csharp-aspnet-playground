@@ -9,11 +9,7 @@ namespace TodoApi.Repository
     {
         public Task AddTodoAsync(string title, Priority priority, DateTime dueDate);
         public Task<List<Todo>> GetAllTodosAsync();
-        public Task CompleteTodoAsync(Guid id);
+        public Task<Todo> GetTodoById(string id);
         public Task DeleteTodoAsync(Guid id);
-        public Task<List<Todo>> GetByStatusAsync(TodoStatus status);
-        public Task<List<Todo>> GetSortedByPriorityAsync();
-        public Task<List<Todo>> GetSortedByDueDateAsync();
-        public Task<List<Todo>> GetByStatusSortedAsync(TodoStatus status);
     }
 }

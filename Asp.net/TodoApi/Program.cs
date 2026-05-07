@@ -1,5 +1,5 @@
 using TodoApi.Repository;
-using TodoCliApp.Services;
+using TodoApi.Services;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);

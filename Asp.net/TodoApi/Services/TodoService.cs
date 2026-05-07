@@ -5,9 +5,9 @@ using TodoApi.Models;
 using TodoApi.Constants;
 using TodoApi.Repository;
 
-namespace TodoCliApp.Services
+namespace TodoApi.Services
 {
-    internal class TodoService(ITodoRepository _repository) : IServiceRepository
+    public class TodoService(ITodoRepository _repository) : IServiceRepository
     {
 
         // Use to add a Todo Task
@@ -44,27 +44,26 @@ namespace TodoCliApp.Services
             return await _repository.GetAllAsync();
         }
 
-        // Use to assign a todo task as completed
-        public async Task CompleteTodoAsync(Guid id)
+        // Use to get a single todo task
+        public async Task<Todo> GetTodoById(string id)
         {
-            if (id == Guid.Empty)
+            if (Guid.TryParse(id, out Guid newID))
             {
-                throw new ArgumentException("Id cannot be empty", nameof(id));
-            }
+                List<Todo> loadedData = await _repository.GetAllAsync();
 
-            List<Todo> loadedData = await _repository.GetAllAsync();
+                var result = loadedData.FirstOrDefault(a => a.Id == newID);
 
-            var result = loadedData.FirstOrDefault(a => a.Id == id);
-
-            if (result != null)
-            {
-                result.Status = TodoStatus.Completed;
-                await _repository.SaveAllAsync(loadedData);
+                if (result != null)
+                {
+                    return result;
+                }
+                else
+                {
+                    throw new ArgumentException("A task with this id does not exist", nameof(id));
+                }
             }
-            else
-            {
-                throw new ArgumentException("A task with this id does not exist", nameof(id));
-            }
+            throw new ArgumentException("Id cannot be empty", nameof(id));
+     
         }
 
         // Use to delete a single TodoTask using its id
@@ -88,44 +87,6 @@ namespace TodoCliApp.Services
             {
                 throw new ArgumentException("A task with this id does not exist", nameof(id));
             }
-        }
-
-        // Use to get Todo with a specific task type(Either pending or completed)
-        public async Task<List<Todo>> GetByStatusAsync(TodoStatus status)
-        {
-            List<Todo> loadedData = await _repository.GetAllAsync();
-            var filteredData = loadedData.Where(a => a.Status == status);
-            return filteredData.ToList();
-        }
-
-
-        // Sort the tasks in descending order
-        public async Task<List<Todo>> GetSortedByPriorityAsync()
-        {
-            List<Todo> loadedData = await _repository.GetAllAsync();
-
-            var sortedDescending = loadedData.OrderByDescending(a => a.Priority);
-
-            return sortedDescending.ToList();
-        }
-
-        // Sort the tasks using the due date ascending order
-        public async Task<List<Todo>> GetSortedByDueDateAsync()
-        {
-            List<Todo> loadedData = await _repository.GetAllAsync();
-
-            var sortByDue = loadedData.OrderBy(a => a.DueDate);
-            return sortByDue.ToList();
-        }
-
-        // Sort the tasks by status and then filter by highest priority
-        public async Task<List<Todo>> GetByStatusSortedAsync(TodoStatus status)
-        {
-            var filterByStatus = await GetByStatusAsync(status);
-
-            var sortedTasks = filterByStatus.OrderByDescending(t => t.Priority);
-
-            return sortedTasks.ToList();
         }
     }
 }
