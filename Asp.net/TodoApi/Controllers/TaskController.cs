@@ -18,11 +18,12 @@ namespace TodoApi.Controllers
 
         // GET: api/todos/{id}
         [HttpGet("{id}")]
-        public async Task<ActionResult<Todo>> GetTodoById(string id)
+        public async Task<ActionResult<Todo>> GetTodoById(Guid id)
         {
             try
             {
-                return Ok(await service.GetTodoById(id));
+                var todo = await service.GetTodoById(id);
+                return Ok(todo);
             }
             catch (Exception ex)
             {
@@ -36,16 +37,29 @@ namespace TodoApi.Controllers
         {
             try
             {
-                
+
                 await service.AddTodoAsync(request.Title, request.Priority, request.DueDate);
                 return Ok();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
 
-        
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteById(Guid id)
+        {
+            try
+            {
+                await service.DeleteTodoAsync(id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
+        }
+
     }
 }

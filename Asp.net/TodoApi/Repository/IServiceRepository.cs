@@ -9,7 +9,7 @@ namespace TodoApi.Repository
     {
         public Task AddTodoAsync(string title, Priority priority, DateTime dueDate);
         public Task<List<Todo>> GetAllTodosAsync();
-        public Task<Todo> GetTodoById(string id);
+        public Task<Todo> GetTodoById(Guid id);
         public Task DeleteTodoAsync(Guid id);
     }
 }

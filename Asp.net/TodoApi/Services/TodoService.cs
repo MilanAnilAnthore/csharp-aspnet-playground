@@ -45,33 +45,11 @@ namespace TodoApi.Services
         }
 
         // Use to get a single todo task
-        public async Task<Todo> GetTodoById(string id)
-        {
-            if (Guid.TryParse(id, out Guid newID))
-            {
-                List<Todo> loadedData = await _repository.GetAllAsync();
-
-                var result = loadedData.FirstOrDefault(a => a.Id == newID);
-
-                if (result != null)
-                {
-                    return result;
-                }
-                else
-                {
-                    throw new ArgumentException("A task with this id does not exist", nameof(id));
-                }
-            }
-            throw new ArgumentException("Id cannot be empty", nameof(id));
-     
-        }
-
-        // Use to delete a single TodoTask using its id
-        public async Task DeleteTodoAsync(Guid id)
+        public async Task<Todo> GetTodoById(Guid id)
         {
             if (id == Guid.Empty)
             {
-                throw new ArgumentException("Id cannot be empty", nameof(id));
+            throw new ArgumentException("Id cannot be empty and need to be valid", nameof(id));
             }
 
             List<Todo> loadedData = await _repository.GetAllAsync();
@@ -80,8 +58,30 @@ namespace TodoApi.Services
 
             if (result != null)
             {
+                return result;
+            }
+            else
+            {
+                throw new ArgumentException("A task with this id does not exist", nameof(id));
+            }
+        }
+
+        // Use to delete a single TodoTask using its id
+        public async Task DeleteTodoAsync(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+            throw new ArgumentException("Id cannot be empty and need to be valid", nameof(id));
+            }
+            List<Todo> loadedData = await _repository.GetAllAsync();
+
+            var result = loadedData.FirstOrDefault(a => a.Id == id);
+
+            if (result != null)
+            {
                 loadedData.Remove(result);
                 await _repository.SaveAllAsync(loadedData);
+                return;
             }
             else
             {
