@@ -7,15 +7,8 @@ using TodoApi.Repository;
 
 namespace TodoCliApp.Services
 {
-    internal class TodoService : IServiceRepository
+    internal class TodoService(ITodoRepository _repository) : IServiceRepository
     {
-
-        private readonly ITodoRepository _repository;
-
-        public TodoService(ITodoRepository repository)
-        {
-            _repository = repository;
-        }
 
         // Use to add a Todo Task
         public async Task AddTodoAsync(string title, Priority priority, DateTime dueDate)
